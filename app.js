@@ -1,6 +1,12 @@
 function onReady() {
   let id = 0;
   let toDos = [];
+  if (localStorage.getItem('toDos')) {
+    toDos = JSON.parse(localStorage.getItem('toDos'));
+  } else {
+    toDos = [];
+  }
+
   const ADD_TODO_FORM = document.getElementById('addToDoForm');
 
   function createNewToDo() {
@@ -15,6 +21,8 @@ function onReady() {
     id++;
 
     NEW_TODO_TEXT.value = '';
+
+    localStorage.setItem('toDos', JSON.stringify(toDos));
 
     renderTheUI();
   }
@@ -40,13 +48,15 @@ function onReady() {
       deleteButton.addEventListener('click', event => {
         toDos = toDos.filter(function(item){
           return item.id !== toDo.id;
-        })
+        });
 
         renderTheUI();
       });
 
+      CHECKBOX.addEventListener('click', event => {
+        toDo.complete = !toDo.complete;
+      });
     });
-
   }
 
   ADD_TODO_FORM.addEventListener('submit', event => {
@@ -56,6 +66,7 @@ function onReady() {
 
   renderTheUI();
 }
+
 
 window.onload = function() {
   onReady();
